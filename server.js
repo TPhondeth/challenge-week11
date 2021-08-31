@@ -36,6 +36,11 @@ app.post('api/notes', (req, res) => {
     res.json(newNote);
 });
 
+// Function to create new note
+const createNewNote(body, notesArray) => {
+    const newNote = body;
+    
+}
 
 // Listener
 app.listen(PORT, () => {
