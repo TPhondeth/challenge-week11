@@ -2,9 +2,11 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const notes = require('./db/db.json');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
 
 // Sets up the Express app
 app.use(express.urlencoded({ extended: true }));
@@ -25,7 +27,14 @@ app.get('*', (req, res) => {
 });
 
 // API Routes
+app.get('api/notes', (req, res) => {
+    res.json(notes.slice(1));
+});
 
+app.post('api/notes', (req, res) => {
+    const newNote = createNewNote(req.body, notes);
+    res.json(newNote);
+});
 
 
 // Listener
