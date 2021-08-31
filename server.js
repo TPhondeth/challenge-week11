@@ -2,18 +2,19 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const notes = require('./db/db.json');
 
+// Port listener
 const PORT = process.env.PORT || 3001;
+
+// Creates server
 const app = express();
 
-
-// Sets up the Express app
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-// HTML Routes
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'));
 });
@@ -26,21 +27,14 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './public.index.html'));
 });
 
-// API Routes
-app.get('api/notes', (req, res) => {
-    res.json(notes.slice(1));
+app.get('/api/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-app.post('api/notes', (req, res) => {
-    const newNote = createNewNote(req.body, notes);
-    res.json(newNote);
+app.get('/api/notes/:id', (req, res) => {
+    let savedNotes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+    res.json(savedNotes[Number(req.params.id)]);
 });
-
-// Function to create new note
-const createNewNote(body, notesArray) => {
-    const newNote = body;
-    
-}
 
 // Listener
 app.listen(PORT, () => {
