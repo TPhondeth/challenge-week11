@@ -16,24 +16,35 @@ app.use(express.static('public'));
 
 // Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/notes.html'));
+    res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './public.index.html'));
+    res.sendFile(path.join(__dirname, 'public.index.html'));
 });
 
 app.get('/api/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './db/db.json'));
+    res.sendFile(path.join(__dirname, 'db/db.json'));
 });
 
-app.get('/api/notes/:id', (req, res) => {
-    let savedNotes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
-    res.json(savedNotes[Number(req.params.id)]);
+// app.get('/api/notes/:id', (req, res) => {
+//     let savedNotes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+//     res.json(savedNotes[Number(req.params.id)]);
+// });
+
+app.post('/api/notes', (req, res) => {
+    let savedNotes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+    let newNote = req.body;
+    let uniqueID = (savedNotes.length).toString();
+    newNote.id = uniqueID;
+    savedNotes.push(newNote);
+
+    fs.writeFileSync('./db/db.json', JSON.stringify(savedNotes));
+    res.json(savedNotes);
 });
 
 // Listener
