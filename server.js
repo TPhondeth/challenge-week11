@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-// HTML Routes
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
@@ -23,11 +23,6 @@ app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-
-// API Routes
 app.get('/api/notes', (req, res) => {
     let savedNote = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
     res.json(savedNote);
@@ -35,6 +30,10 @@ app.get('/api/notes', (req, res) => {
 
 app.get('/api/notes/:id', (req, res) => {
     res.json(savedNote[Number(req.params.id)]);
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.post('/api/notes', (req, res) => {
@@ -48,6 +47,7 @@ app.post('/api/notes', (req, res) => {
     res.json(savedNote);
 });
 
+// Delete route
 app.delete('/api/notes/:id', (req, res) => {
     let savedNote = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
     let noteId = req.params.id;
