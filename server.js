@@ -25,12 +25,12 @@ app.get('/notes', (req, res) => {
 
 // API Routes
 app.get('/api/notes', (req, res) => {
-    let data = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
-    res.json(data);
+    let savedNote = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+    res.json(savedNote);
 });
 
 app.get('/api/notes/:id', (req, res) => {
-    res.json(data[Number(req.params.id)]);
+    res.json(savedNote[Number(req.params.id)]);
 });
 
 app.post('/api/notes', (req, res) => {
